@@ -1,3 +1,9 @@
+/**
+ * to create a single file upload field, either single() method can be used
+ * or array() method can used and allowed number of files can be specified.
+ * using .array() method provides a flexibility over .single() method
+ */
+
 import { Router } from "express";
 
 import { uploadHandler } from "../middlewares";

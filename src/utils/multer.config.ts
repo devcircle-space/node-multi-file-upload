@@ -23,7 +23,7 @@ export const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilt
 	if (fileTypes.includes(file.mimetype)) {
 		cb(null, true);
 	} else {
-		cb(new Error(`${file.mimetype.split("/")[2]} file is not allowed`));
+		cb(new Error(`${file.mimetype.split("/")[1]} file is not allowed`));
 	}
 };
 
