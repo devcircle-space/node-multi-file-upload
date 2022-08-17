@@ -1,1 +1,2 @@
-export { default as IUpload } from "./IUpload";
+export * as FileType from "./IFile";
+

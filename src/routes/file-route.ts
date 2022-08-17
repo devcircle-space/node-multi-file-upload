@@ -11,9 +11,10 @@ import { FileController } from "../controllers";
 
 const router = Router();
 
-router.get("/:id", uploadHandler.single("image"), FileController.findOneById);
-router.post("/single", uploadHandler.single("image"), FileController.uploadOne);
-router.post("/many", uploadHandler.array("image", 3), FileController.uploadMany);
+router.post("/", uploadHandler.array("image", 3), FileController.addFile);
+router.get("/get/:id", uploadHandler.single("image"), FileController.findOneById);
+// router.post("/single", uploadHandler.single("image"), FileController.uploadOne);
+// router.post("/many", uploadHandler.array("image", 3), FileController.uploadMany);
 
 export default router;
 

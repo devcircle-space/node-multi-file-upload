@@ -1,23 +1,25 @@
 import { Schema, model } from "mongoose";
+import { FileType } from "../interfaces";
 
-const FileSchema = new Schema(
+const FileSchema = new Schema<FileType.IFileDocument, FileType.IFileModel>(
 	{
-		fileName: {
-			type: Schema.Types.String,
+		filename: {
+			type: String,
+			required: true,
+		},
+		mimetype: {
+			type: String,
 			required: true,
 		},
 		size: {
-			type: Schema.Types.Number,
-			required: true,
-		},
-		mimeType: {
-			type: Schema.Types.String,
+			type: Number,
 			required: true,
 		},
 	},
 	{ timestamps: true },
 );
 
-const File = model("files", FileSchema);
+const File = model<FileType.IFileDocument, FileType.IFileModel>("files", FileSchema);
 
 export default File;
+

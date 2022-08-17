@@ -2,6 +2,7 @@ import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
 import { mkdirSync } from "fs";
 import { resolve } from "path";
+import { randomBytes } from "crypto";
 
 // array of allowed mimeTypes that can be uploaded
 const fileTypes = ["image/png", "image/jpg", "image/jpeg"];
@@ -16,7 +17,7 @@ export const storage = multer.diskStorage({
 		cb(null, path);
 	},
 	filename: (req: Request, file: Express.Multer.File, cb: FileNameCallback) => {
-		cb(null, `${Date.now()}-${file.originalname}`);
+		cb(null, `${randomBytes(10).toString("hex")}.${file.mimetype.split("/")[1]}`);
 	},
 });
 export const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback): void => {

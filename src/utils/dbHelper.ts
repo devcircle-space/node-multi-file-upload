@@ -1,4 +1,5 @@
 import { connect, MongooseError } from "mongoose";
+import { FileType } from "../interfaces";
 import File from "../models/File";
 
 const URI = process.env.URI as string;
@@ -13,6 +14,22 @@ const DBHelper = {
 		try {
 			const file = await File.findById(id);
 			return { ok: true, data: file };
+		} catch (error) {
+			const { message } = error as MongooseError;
+			console.error(`Error in getting file by id: ${message}`);
+			return { ok: false, error: message };
+		}
+	},
+
+	addNewFile: async (data: Express.Multer.File[]) => {
+		if (!data) return { ok: false, error: "Data not found!" };
+		var newFileArray: FileType.IFileDocument[] = [];
+		data.forEach((file) => {
+			newFileArray.push(new File({ ...file }));
+		});
+		try {
+			newFileArray.forEach((node) => node.save());
+			return { ok: true, data: `${newFileArray.length} files uploaded` };
 		} catch (error) {
 			const { message } = error as MongooseError;
 			console.error(`Error in getting file by id: ${message}`);
