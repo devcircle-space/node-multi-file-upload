@@ -2,23 +2,44 @@ import { Request, Response } from "express";
 import { FileType } from "../interfaces";
 import { DBHelper } from "../utils";
 
-var uploadedFiles: FileType.IFile[] = [];
-
 const FileController = {
 	findOneById: async (req: Request, res: Response) => {
-		if (!req.files) return res.status(400).json({ message: "No file found to update!" });
 		const { id } = req.params;
 		const file = await DBHelper.findFileById(id);
-		if (!file.ok || !file) return res.status(400).json({ message: file.error });
-		console.log(file);
+		if (!file || !file.ok) return res.status(400).json({ message: file.error });
+		return res.status(200).json({ message: file.data });
 	},
 
 	addFile: async (req: Request, res: Response) => {
 		if (!req.files) return res.status(400).json({ message: "Mandatory data missing!" });
 		const FILES = req.files as Express.Multer.File[];
 		const file = await DBHelper.addNewFile(FILES);
-		if (!file.ok || !file) return res.status(400).json({ message: file.error });
+		if (!file || !file.ok) return res.status(400).json({ message: file!.error });
 		return res.status(200).json({ message: file.data });
+	},
+
+	updateOneById: async (req: Request, res: Response) => {
+		if (!req.files) return res.status(400).json({ message: "Mandatory data missing!" });
+		const { id } = req.params;
+		const FILE = req.files as Express.Multer.File[];
+
+		const file = await DBHelper.findFileById(id);
+		if (file.ok) {
+			const isUpdated = await DBHelper.updateFileById(FILE[0], id);
+			if (!isUpdated) return res.status(400).json({ message: "Could not update file" });
+			return res.status(200).json({ message: isUpdated.data });
+		}
+	},
+
+	deleteOneById: async (req: Request, res: Response) => {
+		const { id } = req.params;
+		const file = await DBHelper.findFileById(id);
+		if (!file || !file.ok) return res.status(400).json({ message: file.error });
+		if (file.ok) {
+			const isDeleted = await DBHelper.deleteFileById(id);
+			if (!isDeleted) return res.status(400).json({ message: "Could not delete file" });
+			return res.status(200).json({ message: isDeleted.data });
+		}
 	},
 };
 
