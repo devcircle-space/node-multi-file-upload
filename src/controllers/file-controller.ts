@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
-import { FileType } from "../interfaces";
 import { DBHelper } from "../utils";
 
 const FileController = {
+	findAllFiles: async (req: Request, res: Response) => {
+		const file = await DBHelper.getAllFiles();
+		if (!file || !file.ok) return res.status(400).json({ message: file.error });
+		return res.status(200).json({ message: file.data });
+	},
+
 	findOneById: async (req: Request, res: Response) => {
 		const { id } = req.params;
 		const file = await DBHelper.findFileById(id);

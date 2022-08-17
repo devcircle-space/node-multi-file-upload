@@ -11,7 +11,8 @@ import { FileController } from "../controllers";
 
 const router = Router();
 
-router.post("/", uploadHandler.array("image", 3), FileController.addFile);
+router.get("/", FileController.findAllFiles);
+router.post("/upload", uploadHandler.array("image", 3), FileController.addFile);
 router.get("/get/:id", FileController.findOneById);
 router.put("/update/:id", uploadHandler.array("image", 3), FileController.updateOneById);
 router.delete("/delete/:id", FileController.deleteOneById);

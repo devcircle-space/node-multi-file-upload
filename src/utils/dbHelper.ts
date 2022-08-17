@@ -9,6 +9,9 @@ type OperationReturnType = {
 		| (FileType.IFileDocument & {
 				_id: Types.ObjectId;
 		  })
+		| (FileType.IFileDocument & {
+				_id: Types.ObjectId;
+		  })[]
 		| string
 		| null;
 };
@@ -16,6 +19,17 @@ type OperationReturnType = {
 const DBHelper = {
 	connectToDb: (uri: string) => {
 		connect(uri, () => console.info("MongoDB connected!"));
+	},
+
+	getAllFiles: async (): Promise<OperationReturnType> => {
+		try {
+			const file = await File.find();
+			return { ok: true, data: file };
+		} catch (error) {
+			const { message } = error as MongooseError;
+			console.error(`Error in getting file by id: ${message}`);
+			return { ok: false, error: message };
+		}
 	},
 
 	findFileById: async (id: string): Promise<OperationReturnType> => {
