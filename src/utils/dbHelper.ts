@@ -28,11 +28,13 @@ const DBHelper = {
 			newFileArray.push(new File({ ...file }));
 		});
 		try {
-			newFileArray.forEach((node) => node.save());
-			return { ok: true, data: `${newFileArray.length} files uploaded` };
+			const result = newFileArray.map(async (node) => {
+				return await node.save();
+			});
+			if (result) return { ok: true, data: `${newFileArray.length} files uploaded` };
 		} catch (error) {
 			const { message } = error as MongooseError;
-			console.error(`Error in getting file by id: ${message}`);
+			console.error(`Error in uploading file(s): ${message}`);
 			return { ok: false, error: message };
 		}
 	},

@@ -12,6 +12,7 @@ A simple Node/Express application to demonstrate multi-file upload, using Multer
 
 -   Clone the project and run `npm i` to install all dependencies.
 -   By default, application starts up at `PORT=4001`
+-   Make sure to provide your own MongoDB URI for upload functionality to work
 
 ## API Endpoints
 
