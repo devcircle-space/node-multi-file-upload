@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { IUpload } from "../interfaces";
+import { DBHelper } from "../utils";
 
 var uploadedFiles: IUpload[] = [];
 
@@ -28,6 +29,14 @@ const FileController = {
 			uploadedFiles.push(newFile);
 		});
 		return res.status(200).json({ message: `${FILES.length} files received`, data: uploadedFiles });
+	},
+
+	findOneById: async (req: Request, res: Response) => {
+		if (!req.files) return res.status(400).json({ message: "No file found to update!" });
+		const { id } = req.params;
+		const file = await DBHelper.findFileById(id);
+		if (!file.ok || !file) return res.status(400).json({ message: file.error });
+		console.log(file);
 	},
 };
 
